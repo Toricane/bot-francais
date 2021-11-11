@@ -27,7 +27,8 @@ async def ir_conjugate(ctx, bot):
         random_ending = {e: endings[e]}
         random_endings.append(random_ending)
         embed = Embed(
-            title=f"Conjugate {verb}", description=list(random_ending.keys())[0]
+            title=f"Conjugate {verb}",
+            description=f"{list(random_ending.keys())[0].capitalize()} ({verb})",
         )
         embeds.append(embed)
     start = time()
@@ -38,7 +39,6 @@ async def ir_conjugate(ctx, bot):
                 msg = await bot.wait_for(
                     "message", check=lambda x: x.author == ctx.author, timeout=60
                 )
-                print(msg.content.lower()[-len(list(ending.values())[0]) :])
                 if msg.content.lower()[
                     -len(list(ending.values())[0]) :
                 ] in ending.values() and len(msg.content.lower()) == len(

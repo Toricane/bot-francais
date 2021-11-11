@@ -8,6 +8,9 @@ from discord_slash import SlashCommand
 from conjugations.ER import er_conjugate
 from conjugations.IR import ir_conjugate
 from conjugations.RE import re_conjugate
+from irregular_verbs.etre import use_etre
+from irregular_verbs.aller import use_aller
+from irregular_verbs.avoir import use_avoir
 from dotenv import load_dotenv
 
 from keep_alive import keep_alive
@@ -40,6 +43,21 @@ async def conjugate_ir(ctx):
 @slash.subcommand(base="conjugate", name="re", guild_ids=g)
 async def conjugate_re(ctx):
     await re_conjugate(ctx, bot)
+
+
+@slash.slash(name="etre", guild_ids=g)
+async def etre(ctx):
+    await use_etre(ctx, bot)
+
+
+@slash.slash(name="aller", guild_ids=g)
+async def aller(ctx):
+    await use_aller(ctx, bot)
+
+
+@slash.slash(name="avoir", guild_ids=g)
+async def avoir(ctx):
+    await use_avoir(ctx, bot)
 
 
 keep_alive()
