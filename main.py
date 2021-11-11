@@ -9,9 +9,9 @@ from discord.ext import commands
 from discord_slash import SlashCommand
 from discord_slash.utils.manage_components import create_button, create_actionrow
 from discord_slash.context import ComponentContext
-from conjugations.ER import endings, verbs
-from conjugations.IR import endings as irendings, verbs as irverbs
-from conjugations.RE import endings as reendings, verbs as reverbs
+from conjugations.ER import er_conjugate
+from conjugations.IR import ir_conjugate
+from conjugations.RE import re_conjugate
 from random import choice, shuffle
 from dotenv import load_dotenv
 from asyncio import TimeoutError
@@ -35,160 +35,17 @@ async def on_ready():
 
 @slash.subcommand(base="conjugate", name="er", guild_ids=g)
 async def conjugate_er(ctx):
-    random_verbs = verbs.copy()
-    shuffle(random_verbs)
-    random_endings = []
-    embeds = []
-    score = 0
-    can_score = True
-    for verb in random_verbs:
-        e = choice(list(endings.keys()))
-        random_ending = {e: endings[e]}
-        random_endings.append(random_ending)
-        embed = Embed(
-            title=f"Conjugate {verb}", description=list(random_ending.keys())[0]
-        )
-        embeds.append(embed)
-    start = time()
-    for embed, ending, verb in zip(embeds, random_endings, random_verbs):
-        await ctx.send(embed=embed)
-        while True:
-            try:
-                msg = await bot.wait_for(
-                    "message", check=lambda x: x.author == ctx.author, timeout=60
-                )
-                print(msg.content.lower()[-len(list(ending.values())[0]) :])
-                if msg.content.lower()[
-                    -len(list(ending.values())[0]) :
-                ] in ending.values() and len(msg.content.lower()) == len(
-                    verb
-                ) - 2 + len(
-                    list(ending.values())[0]
-                ):
-                    await msg.add_reaction("✅")
-                    if can_score:
-                        score += 1
-                    can_score = True
-                    break
-                elif msg.content.lower() == "cancel":
-                    await ctx.send("Cancelled!")
-                    return
-                else:
-                    await msg.add_reaction("❌")
-                    can_score = False
-            except TimeoutError:
-                await ctx.send("Timed out!")
-                return
-    end = time()
-    await ctx.send(
-        f"You got {score}/{len(random_verbs)}: {round(score/len(random_verbs)*100, 1)}%!\nYou took {round(end-start, 1)} seconds to complete!"
-    )
+    await er_conjugate(ctx, bot)
 
 
 @slash.subcommand(base="conjugate", name="ir", guild_ids=g)
 async def conjugate_ir(ctx):
-    random_verbs = irverbs.copy()
-    shuffle(random_verbs)
-    random_endings = []
-    embeds = []
-    score = 0
-    can_score = True
-    for verb in random_verbs:
-        e = choice(list(irendings.keys()))
-        random_ending = {e: irendings[e]}
-        random_endings.append(random_ending)
-        embed = Embed(
-            title=f"Conjugate {verb}", description=list(random_ending.keys())[0]
-        )
-        embeds.append(embed)
-    start = time()
-    for embed, ending, verb in zip(embeds, random_endings, random_verbs):
-        await ctx.send(embed=embed)
-        while True:
-            try:
-                msg = await bot.wait_for(
-                    "message", check=lambda x: x.author == ctx.author, timeout=60
-                )
-                print(msg.content.lower()[-len(list(ending.values())[0]) :])
-                if msg.content.lower()[
-                    -len(list(ending.values())[0]) :
-                ] in ending.values() and len(msg.content.lower()) == len(
-                    verb
-                ) - 2 + len(
-                    list(ending.values())[0]
-                ):
-                    await msg.add_reaction("✅")
-                    if can_score:
-                        score += 1
-                    can_score = True
-                    break
-                elif msg.content.lower() == "cancel":
-                    await ctx.send("Cancelled!")
-                    return
-                else:
-                    await msg.add_reaction("❌")
-                    can_score = False
-            except TimeoutError:
-                await ctx.send("Timed out!")
-                return
-    end = time()
-    await ctx.send(
-        f"You got {score}/{len(random_verbs)}: {round(score/len(random_verbs)*100, 1)}%!\nYou took {round(end-start, 1)} seconds to complete!"
-    )
+    await ir_conjugate(ctx, bot)
 
 
 @slash.subcommand(base="conjugate", name="re", guild_ids=g)
-async def conjugate_er(ctx):
-    random_verbs = reverbs.copy()
-    shuffle(random_verbs)
-    random_endings = []
-    embeds = []
-    score = 0
-    can_score = True
-    for verb in random_verbs:
-        e = choice(list(reendings.keys()))
-        random_ending = {e: reendings[e]}
-        random_endings.append(random_ending)
-        embed = Embed(
-            title=f"Conjugate {verb}", description=list(random_ending.keys())[0]
-        )
-        embeds.append(embed)
-    start = time()
-    for embed, ending, verb in zip(embeds, random_endings, random_verbs):
-        await ctx.send(embed=embed)
-        while True:
-            try:
-                msg = await bot.wait_for(
-                    "message", check=lambda x: x.author == ctx.author, timeout=60
-                )
-                print(msg.content.lower()[-len(list(ending.values())[0]) :])
-                if (
-                    msg.content.lower()[-len(list(ending.values())[0]) :]
-                    in ending.values()
-                    and len(msg.content.lower())
-                    == len(verb) - 2 + len(list(ending.values())[0])
-                ) or (
-                    list(ending.values())[0] == ""
-                    and msg.content.lower() == verb.replace("re", "")
-                ):
-                    await msg.add_reaction("✅")
-                    if can_score:
-                        score += 1
-                    can_score = True
-                    break
-                elif msg.content.lower() == "cancel":
-                    await ctx.send("Cancelled!")
-                    return
-                else:
-                    await msg.add_reaction("❌")
-                    can_score = False
-            except TimeoutError:
-                await ctx.send("Timed out!")
-                return
-    end = time()
-    await ctx.send(
-        f"You got {score}/{len(random_verbs)}: {round(score/len(random_verbs)*100, 1)}%!\nYou took {round(end-start, 1)} seconds to complete!"
-    )
+async def conjugate_re(ctx):
+    await re_conjugate(ctx, bot)
 
 
 keep_alive()
