@@ -32,6 +32,11 @@ async def on_ready():
     print(f"{t3} seconds")
 
 
+@slash.slash(name="ping", guild_ids=g)
+async def ping(ctx):
+    await ctx.send(f"Pong! {round(bot.latency*1000)}ms")
+
+
 @slash.subcommand(base="conjugate", name="er", guild_ids=g)
 async def conjugate_er(ctx):
     await er_conjugate(ctx, bot)
@@ -73,5 +78,4 @@ async def answer(ctx):
 
 
 keep_alive()
-bot.load_extension("jishaku")
 bot.run(getenv("TOKEN"))
