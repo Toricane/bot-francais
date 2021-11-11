@@ -1,5 +1,7 @@
 .replit
 .idea/
+.lock
+.toml
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
