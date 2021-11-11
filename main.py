@@ -11,6 +11,8 @@ from conjugations.RE import re_conjugate
 from irregular_verbs.etre import use_etre
 from irregular_verbs.aller import use_aller
 from irregular_verbs.avoir import use_avoir
+from questions.Qs import get_ans
+from questions.Qs import get_ques
 from dotenv import load_dotenv
 
 from keep_alive import keep_alive
@@ -58,6 +60,16 @@ async def aller(ctx):
 @slash.slash(name="avoir", guild_ids=g)
 async def avoir(ctx):
     await use_avoir(ctx, bot)
+
+
+@slash.subcommand(base="question", name="english", guild_ids=g)
+async def question(ctx):
+    await get_ques(ctx, bot)
+
+
+@slash.subcommand(base="question", name="french", guild_ids=g)
+async def answer(ctx):
+    await get_ans(ctx, bot)
 
 
 keep_alive()
