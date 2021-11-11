@@ -1,3 +1,4 @@
+from asyncio import TimeoutError
 from discord import Embed
 from random import choice, shuffle
 from time import time

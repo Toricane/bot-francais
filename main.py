@@ -2,19 +2,13 @@ from time import time
 
 t = time()
 
-import discord
-from discord import Embed
 from os import getenv
 from discord.ext import commands
 from discord_slash import SlashCommand
-from discord_slash.utils.manage_components import create_button, create_actionrow
-from discord_slash.context import ComponentContext
 from conjugations.ER import er_conjugate
 from conjugations.IR import ir_conjugate
 from conjugations.RE import re_conjugate
-from random import choice, shuffle
 from dotenv import load_dotenv
-from asyncio import TimeoutError
 
 from keep_alive import keep_alive
 
